@@ -5,7 +5,7 @@
 # Try installing docker if not installed yet
 echo Setup Docker
 docker --version || (\
-    apt-get update && \
+    #apt-get update && \
     apt-get install wget -y && \
     (wget -qO- https://get.docker.com/ | sh) && \
     usermod -aG docker vagrant)
@@ -14,8 +14,8 @@ docker --version || (\
 echo Setup Puppet
 puppet --version || (\
     cd /tmp && \
-    wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb && \
-    dpkg -i puppetlabs-release-precise.deb && \
+    wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb && \
+    dpkg -i puppetlabs-release-trusty.deb && \
     apt-get update)
 
 echo Setup Docker Compose
@@ -24,4 +24,4 @@ docker-compose --version || (\
     chmod +x /usr/local/bin/docker-compose)
 
 echo Setup SupervisorD
-supervisor --version || (apt-get install supervisor -y)
+supervisord --version || (apt-get install supervisor -y)
