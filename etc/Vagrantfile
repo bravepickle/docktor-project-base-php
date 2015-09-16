@@ -42,8 +42,7 @@ Vagrant.configure(2) do |config|
 
   config.push.define "atlas" do |push|
     push.app = "zig-zag/docktor-master-test"
-    push.vcs = false # set to true later
-    push.token = "pNnk770yzhGVqA.atlasv1.4eXCQMszLw0mnerxhdilC5vgdS9dptgkQefiVVji1rVk7GgHBjSm2u6nXpYXVcHW8Ls"
-    push.dir = "atlas-packer-vagrant"
+    push.vcs = true
+    push.dir = "private/docktor-master-test"
   end
 end
