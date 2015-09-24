@@ -7,7 +7,11 @@ vm_ip = "192.168.33.211"
 vm_host = "docktor-master"
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "puphpet/ubuntu1404-x64" # TODO: replace with own box
+  config.vm.box_url = "file:///var/www/docktor/docktor-master-test/packer_vmware-iso_vmware.box"
+  #config.vm.box_url = "https://atlas.hashicorp.com/zig-zag/docktor-master-test"
+  config.vm.box = "zig-zag/docktor-master-test" # TODO: replace with own box
+  config.vm.box_check_update = true
+
   config.vm.hostname = vm_host
   config.vm.boot_timeout = 720
   config.vm.post_up_message = "Add to /etc/hosts line: #{vm_ip} #{vm_host}"
@@ -32,7 +36,9 @@ Vagrant.configure(2) do |config|
   # init docker and setup environment
   config.vm.provision "shell", path: "../bin/init_docker_master.sh"
 
-  # puppet install
+  config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
+
+  # puppet provision
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet"
     puppet.manifest_file = "docker_master.pp"
