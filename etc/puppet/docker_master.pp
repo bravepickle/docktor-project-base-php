@@ -5,12 +5,7 @@ package { 'git':
 $packages = hiera('extra_packages')
 $ci_manager = hiera('ci_manager')
 
-notify { 'extra_pkg':
-    message => 'successfully setup extra packages'
-}
-
 package { $packages:
-    before => Notify['extra_pkg'],
     ensure => present
 }
 
