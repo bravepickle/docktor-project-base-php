@@ -7,8 +7,8 @@ vm_ip = "192.168.33.211"
 vm_host = "docktor-master"
 
 Vagrant.configure(2) do |config|
-  config.vm.box_url = "file:///var/www/docktor/docktor-master-test/packer_vmware-iso_vmware.box"
-  #config.vm.box_url = "https://atlas.hashicorp.com/zig-zag/docktor-master-test"
+  # config.vm.box_url = "file:///var/www/docktor/docktor-master-test/packer_vmware-iso_vmware.box"
+  config.vm.box_url = "https://atlas.hashicorp.com/zig-zag/docktor-master-test"
   config.vm.box = "zig-zag/docktor-master-test" # TODO: replace with own box
   config.vm.box_check_update = true
 
@@ -26,7 +26,7 @@ Vagrant.configure(2) do |config|
     v.vmx["displayname"] = vm_name
 
     # No need for NFS for VMWARE
-    override.vm.synced_folder "../data/www", vm_root
+    override.vm.synced_folder "../data", vm_root
   end
 
   # copy files from host to guest
