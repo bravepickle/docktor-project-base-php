@@ -34,7 +34,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/host_id_rsa.pub"
 
   # init docker and setup environment
-  config.vm.provision "shell", path: "../bin/init_docker_master.sh"
+  config.vm.provision "shell", path: "../bin/provision.sh"
 
   #config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
 
@@ -44,11 +44,5 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file = "docker_master.pp"
     puppet.hiera_config_path = "puppet/hiera.yaml"
     #puppet.working_directory = "/tmp/vagrant-puppet"
-  end
-
-  config.push.define "atlas" do |push|
-    push.app = "zig-zag/docktor-master-test"
-    push.vcs = true
-    push.dir = "private/docktor-master-test"
   end
 end
