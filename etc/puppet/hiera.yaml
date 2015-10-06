@@ -2,7 +2,7 @@
 :backends:
   - yaml
 :yaml:
-  :datadir: "/vagrant/puppet/hieradata"
+  :datadir: "/etc/puppet/hieradata"
 :hierarchy:
   - "virtual/%{::virtual}"
   - "common"

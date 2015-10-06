@@ -1,10 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-vm_name = "Docker Master"
+vm_name = "Docktor Master"
 vm_root = "/var/www"
 vm_ip = "192.168.33.211"
 vm_host = "docktor-master"
+puppet_modulepath = "/etc/puppet/modules"
+vm_bin = "/usr/local/bin"
 
 Vagrant.configure(2) do |config|
   # config.vm.box_url = "file:///var/www/docktor/docktor-master-test/packer_vmware-iso_vmware.box"
@@ -29,14 +31,21 @@ Vagrant.configure(2) do |config|
     override.vm.synced_folder "../data", vm_root
   end
 
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
+  config.vm.synced_folder "puppet/modules", puppet_modulepath
+  config.vm.synced_folder "puppet", "/etc/puppet", type: "rsync", rsync__exclude: ["modules/"]
+  config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync", rsync__exclude: ["authorized_keys"]
+
+  # copy binaries
+  config.vm.synced_folder "../bin", vm_bin, type: "rsync"
+
   # copy files from host to guest
   config.vm.provision "file", source: "~/.gitconfig", destination: ".gitconfig"
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/host_id_rsa.pub"
 
   # init docker and setup environment
-  config.vm.provision "shell", path: "../bin/provision.sh"
-
-  #config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
+  config.vm.provision "shell", name: "Setup server configuration", path: "../bin/provision.sh"
 
   # puppet provision
   config.vm.provision "puppet" do |puppet|
