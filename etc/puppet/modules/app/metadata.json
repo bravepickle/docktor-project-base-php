@@ -1,0 +1,16 @@
+{
+  "name": "zigzag-app",
+  "version": "0.1.0",
+  "author": "zigzag",
+  "summary": "Core web project definition",
+  "license": "Apache 2.0",
+  "source": "http://github.com/zig-zag/project-base-php",
+  "project_page": "https://github.com/zig-zag/project-base-php",
+  "issues_url": "https://github.com/zig-zag/project-base-php/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
+    {"name":"garethr/docker","version_requirement":">= 4.1.1"},
+    {"name":"jfryman/nginx","version_requirement":">= 0.2.7"}
+  ]
+}
+
