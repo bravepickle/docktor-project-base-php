@@ -8,5 +8,8 @@ Basic setup for PHP project
 - restart after changes docker
 - go cd agent optionally setup
 - in config set AGENT KEY for autoassign and sync it with server
+- ssh connection to db
+- mysql install
+
 
 

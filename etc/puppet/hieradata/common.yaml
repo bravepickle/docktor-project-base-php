@@ -5,7 +5,34 @@ extra_packages:
     - htop
     - wget
     - iotop
+    - git
 
-ci_manager:
-    host: "docktor-ci-manager"
-    ip: "192.168.35.121"
+application:
+    host: docktor-master
+    ip: 192.168.35.122
+    bin_dir: /usr/local/bin
+    certs_dir: /var/www/private/certs
+
+docker:
+    socket: /var/run/docker.sock
+
+    registry:
+        host: docktor-ci-manager
+        port: 5000
+
+    go_cd:
+        agent_key: 123456789abcdef # server default. Must be synced by all servers and agents
+        server:
+            host: docktor-ci-manager
+            ip: 192.168.35.121
+
+        agent:
+            container_name: go_cd_agent
+            data_dir: /var/www/private/go_cd
+
+# TODO: init
+#    sonar:
+#        port_web: 9001
+#        port_api: 9092
+#        container_name: sonar
+#        data_dir: /data/private/go_cd

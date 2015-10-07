@@ -1,0 +1,14 @@
+server {
+    listen 80 default_server;
+    root /var/www/site;
+#server_name {{ hostname }} {{ host_aliases|join(' ') }};
+
+    default_type text/html;
+
+    location / {
+        index index.html;
+    }
+
+    access_log /var/log/nginx/access-default.log;
+    error_log /var/log/nginx/error-default.log;
+}

@@ -1,22 +1,22 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-vm_name = "Docktor Master"
-vm_root = "/var/www"
-vm_ip = "192.168.33.211"
-vm_host = "docktor-master"
-puppet_modulepath = "/etc/puppet/modules"
+vm_name = "Docktor Application Server"
+vm_root_dir = "/var/www"
+vm_ip = "192.168.35.122"
+vm_hostname = "docktor-master"
+vm_modulepath = "/etc/puppet/modules"
+vm_hieradata_dir = "/etc/puppet/hieradata"
 vm_bin = "/usr/local/bin"
 
 Vagrant.configure(2) do |config|
-  # config.vm.box_url = "file:///var/www/docktor/docktor-master-test/packer_vmware-iso_vmware.box"
   config.vm.box_url = "https://atlas.hashicorp.com/zig-zag/docktor-master-test"
-  config.vm.box = "zig-zag/docktor-master-test" # TODO: replace with own box
+  config.vm.box = "zig-zag/docktor-master-test"
   config.vm.box_check_update = true
 
-  config.vm.hostname = vm_host
+  config.vm.hostname = vm_hostname
   config.vm.boot_timeout = 720
-  config.vm.post_up_message = "Add to /etc/hosts line: #{vm_ip} #{vm_host}"
+  config.vm.post_up_message = "Add to /etc/hosts line: #{vm_ip} #{vm_hostname}"
 
   config.vm.network "private_network", ip: vm_ip
 
@@ -28,12 +28,11 @@ Vagrant.configure(2) do |config|
     v.vmx["displayname"] = vm_name
 
     # No need for NFS for VMWARE
-    override.vm.synced_folder "../data", vm_root
+    override.vm.synced_folder "../data", vm_root_dir
   end
 
-
   config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
-  config.vm.synced_folder "puppet/modules", puppet_modulepath
+  config.vm.synced_folder "puppet/modules", vm_modulepath
   config.vm.synced_folder "puppet", "/etc/puppet", type: "rsync", rsync__exclude: ["modules/"]
   config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync", rsync__exclude: ["authorized_keys"]
 
@@ -41,17 +40,18 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../bin", vm_bin, type: "rsync"
 
   # copy files from host to guest
-  config.vm.provision "file", source: "~/.gitconfig", destination: ".gitconfig"
-  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/host_id_rsa.pub"
+  config.vm.provision "file", source: "~/.gitconfig", destination: "~/.gitconfig"
+  config.vm.provision "file", source: "~/.gitignore_global", destination: "~/.gitignore_global"
 
   # init docker and setup environment
   config.vm.provision "shell", name: "Setup server configuration", path: "../bin/provision.sh"
 
-  # puppet provision
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet"
-    puppet.manifest_file = "docker_master.pp"
-    puppet.hiera_config_path = "puppet/hiera.yaml"
-    #puppet.working_directory = "/tmp/vagrant-puppet"
-  end
+      puppet.synced_folder_type = "rsync"
+      puppet.manifests_path = "puppet"
+      puppet.manifest_file = "site.pp"
+      puppet.options = "--yamldir #{vm_hieradata_dir}"
+      puppet.hiera_config_path = "puppet/hiera.yaml"
+      puppet.module_path = "puppet/modules"
+    end
 end
