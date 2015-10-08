@@ -1,0 +1,6 @@
+db_server:
+    image: "<%= @docker['registry']['host'] %>:<%= @docker['registry']['port'] %>/percona"
+    environment:
+        - "MYSQL_ROOT_PASSWORD=<%= @docker['db']['root_password'] %>"
+    volumes:
+        - "<%= @docker['db']['data_dir'] %>/lib:/var/lib/mysql",
