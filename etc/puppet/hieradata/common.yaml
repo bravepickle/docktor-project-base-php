@@ -12,6 +12,7 @@ application:
     ip: 192.168.35.122
     bin_dir: /usr/local/bin
     certs_dir: /var/www/private/certs
+    fs_user: vagrant
 
 docker:
     socket: /var/run/docker.sock
@@ -38,8 +39,16 @@ docker:
     db:
         container_name: db_server
         root_password: 1$ecretPass!
-        data_dir: /var/www/private/db
+        user: dbuser
+        password: 1234
+#        data_dir: /var/www/private/db
+        data_dir: /data/db
         image: "docktor-ci-manager:5000/percona"
+        fs_user: mysql
+        fs_user_id: 999
+        fs_group: group
+        fs_group: docker
+        fs_group_id: 999
 
 # TODO: init
 #    sonar:

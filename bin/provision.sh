@@ -36,7 +36,7 @@ fi
 
 if [[ "$DOCKER_COMPOSE_INSTALL" == "1" ]]; then
 echo Setup Docker Compose
-docker-compose --version || (\
+$DOCKER_COMPOSE_BIN/docker-compose --version || (\
     curl -L https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > $DOCKER_COMPOSE_BIN/docker-compose && \
     chmod +x $DOCKER_COMPOSE_BIN/docker-compose && \
     docker-compose --version
