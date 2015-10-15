@@ -10,12 +10,6 @@ class app::db::init (
         app => $app,
     }
 
-#    docker run --name some-percona -v /my/custom:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=my-secret-pw -d percona:tag
-
-#    docker::image {'db_server':
-#        image => 'docktor-ci-manager:5000/percona',
-#    }
-
     # TODO: fix permissions problems with mounting volumes
     docker::run { 'db_server':
         name            => $config['container_name'],
@@ -27,19 +21,11 @@ class app::db::init (
             "MYSQL_PASSWORD=${config[password]}",
         ],
         ports => ["${config[port]}:3306"],
-#        volumes_from         => [
-#            "$dir/lib:/var/lib/mysql",
-##            "$dir/conf.d:/etc/mysql/conf.d",
-#        ],
-#        volumes         => [
-#            "/var/lib/mysql",
-#            "/etc/mysql/conf.d",
-#        ],
         volumes         => [
             "$dir/lib:/var/lib/mysql",
             "$dir/conf.d:/etc/mysql/conf.d",
         ],
     }
 
-    Class['app::db::config'] -> Docker::Run['db_server'] # -> Docker::Run['db_server_backup']
+    Class['app::db::config'] -> Docker::Run['db_server']
 }

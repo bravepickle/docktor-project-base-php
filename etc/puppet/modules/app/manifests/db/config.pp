@@ -33,16 +33,6 @@ class app::db::config (
         mode => 775,
     }
 
-    file { 'db_config':
-        path => "$dir/conf.d/app.cnf",
-        ensure => present,
-        content => template('app/etc/mysql/conf.d/my.cnf.erb'),
-        owner => $config['fs_user'],
-        group => $config['fs_group_id'],
-        mode => 640,
-    }
-
-
     exec { 'db_bin_dir':
         command => "mkdir -p $dir/conf.d",
         path => '/bin',
@@ -74,5 +64,4 @@ class app::db::config (
 
     Group['db'] -> User['db'] -> Exec['db_lib_dir'] -> File['db_lib_dir']
     Group['db'] -> User['db'] -> Exec['db_bin_dir'] -> File['db_bin_dir']
-    Group['db'] -> User['db'] -> Exec['db_conf_dir'] -> File['db_conf_dir'] -> File['db_config']
 }
