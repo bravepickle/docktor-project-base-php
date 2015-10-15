@@ -26,15 +26,20 @@ class app::db::init (
             "MYSQL_USER=${config[user]}",
             "MYSQL_PASSWORD=${config[password]}",
         ],
+        ports => ["${config[port]}:3306"],
 #        volumes_from         => [
 #            "$dir/lib:/var/lib/mysql",
 ##            "$dir/conf.d:/etc/mysql/conf.d",
 #        ],
+#        volumes         => [
+#            "/var/lib/mysql",
+#            "/etc/mysql/conf.d",
+#        ],
         volumes         => [
             "$dir/lib:/var/lib/mysql",
-#            "$dir/conf.d:/etc/mysql/conf.d",
+            "$dir/conf.d:/etc/mysql/conf.d",
         ],
     }
 
-    Class['app::db::config'] -> Docker::Run['db_server']
+    Class['app::db::config'] -> Docker::Run['db_server'] # -> Docker::Run['db_server_backup']
 }

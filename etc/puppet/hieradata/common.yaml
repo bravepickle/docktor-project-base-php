@@ -37,9 +37,11 @@ docker:
             data_dir: /var/www/private/go_cd
 
     db:
-        container_name: db_server
-        root_password: 1$ecretPass!
+        container_name: db-server
+        root_password: 1234
+        dbname: main_db
         user: dbuser
+        port: 3306
         password: 1234
 #        data_dir: /var/www/private/db
         data_dir: /data/db

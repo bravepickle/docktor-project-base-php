@@ -14,8 +14,32 @@ class app::db::config (
         path => "$dir/lib",
         ensure => directory,
         owner => $config['fs_user'],
-        group => $config['fs_user'],
+        group => $config['fs_group_id'],
         mode => 775,
+    }
+
+
+    exec { 'db_conf_dir':
+        command => "mkdir -p $dir/conf.d",
+        path => '/bin',
+        creates => "$dir/conf.d",
+    }
+
+    file { 'db_conf_dir':
+        path => "$dir/conf.d",
+        ensure => directory,
+        owner => $config['fs_user'],
+        group => $config['fs_group_id'],
+        mode => 775,
+    }
+
+    file { 'db_config':
+        path => "$dir/conf.d/app.cnf",
+        ensure => present,
+        content => template('app/etc/mysql/conf.d/my.cnf.erb'),
+        owner => $config['fs_user'],
+        group => $config['fs_group_id'],
+        mode => 640,
     }
 
 
@@ -29,7 +53,7 @@ class app::db::config (
         path => "$dir/bin",
         ensure => directory,
         owner => $config['fs_user'],
-        group => $config['fs_user'],
+        group => $config['fs_group_id'],
         mode => 775,
     }
 
@@ -37,7 +61,7 @@ class app::db::config (
         name => $config['fs_user'],
         ensure => present,
         uid => $config['fs_user_id'],
-        gid => $config['fs_group_id'],
+#        gid => $config['fs_group_id'],
         groups => $app['fs_user'],
         comment => 'User that should own volumes for DB server in Docker containers. Handled by Puppet',
     }
@@ -50,4 +74,5 @@ class app::db::config (
 
     Group['db'] -> User['db'] -> Exec['db_lib_dir'] -> File['db_lib_dir']
     Group['db'] -> User['db'] -> Exec['db_bin_dir'] -> File['db_bin_dir']
+    Group['db'] -> User['db'] -> Exec['db_conf_dir'] -> File['db_conf_dir'] -> File['db_config']
 }

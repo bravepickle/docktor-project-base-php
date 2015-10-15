@@ -8,6 +8,8 @@ vm_hostname = "docktor-master"
 vm_modulepath = "/etc/puppet/modules"
 vm_hieradata_dir = "/etc/puppet/hieradata"
 vm_bin = "/usr/local/bin"
+vm_user = "vagrant"
+vm_group = "docker"
 
 Vagrant.configure(2) do |config|
   config.vm.box_url = "https://atlas.hashicorp.com/zig-zag/docktor-master-test"
@@ -28,7 +30,7 @@ Vagrant.configure(2) do |config|
     v.vmx["displayname"] = vm_name
 
     # No need for NFS for VMWARE
-    override.vm.synced_folder "../data", vm_root_dir
+    override.vm.synced_folder "../data", vm_root_dir, owner: vm_user, group: vm_group
   end
 
   config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
