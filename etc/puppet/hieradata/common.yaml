@@ -52,6 +52,12 @@ docker:
         fs_group: docker
         fs_group_id: 999
 
+    nginx_php:
+        container_name: web-server
+        image: "docktor-ci-manager:5000/nginx-php-fpm"
+        port: 8080
+        data_dir: /var/www/app
+
 # TODO: init
 #    sonar:
 #        port_web: 9001

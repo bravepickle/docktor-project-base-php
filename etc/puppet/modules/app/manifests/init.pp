@@ -37,9 +37,10 @@
 #
 class app {
     include app::docker
-    include app::nginx
-    include app::db::init # cannot be run due to insecure registry + self signed certificates + docker blocker...
+    include app::nginx     # main NGINX server on host
+    include app::db::init  # cannot be run due to insecure registry + self signed certificates + docker blocker...
 #    include app::compose::init
 
-    Class['app::docker'] -> Class['app::db::init'] # -> Class['app::compose::init']
+    Class['app::docker'] -> Class['app::db::init'] -> Class['app::nginx']
+    # -> Class['app::compose::init']
 }

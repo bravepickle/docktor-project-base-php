@@ -11,8 +11,7 @@ class app::db::init (
     }
 
     # TODO: fix permissions problems with mounting volumes
-    docker::run { 'db_server':
-        name            => $config['container_name'],
+    docker::run { $config['container_name']:
         image           => $config['image'],
         env             => [
             "MYSQL_ROOT_PASSWORD=${config[root_password]}",
@@ -27,5 +26,5 @@ class app::db::init (
         ],
     }
 
-    Class['app::db::config'] -> Docker::Run['db_server']
+    Class['app::db::config'] -> Docker::Run[$config['container_name']]
 }

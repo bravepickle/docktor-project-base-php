@@ -42,6 +42,11 @@ class app::docker {
 #        }
     }
 
+    class { app::nginx_php::init:
+        docker => $docker,
+        app => $app,
+    }
+
 
     # TODO: setup sonar
 #    class { app::sonar::init:
