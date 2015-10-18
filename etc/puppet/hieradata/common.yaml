@@ -19,7 +19,7 @@ docker:
 
     compose:
         enabled: true
-        data_dir: /var/www/private/compose
+        data_dir: /docker_data/compose
 
     registry:
         host: docktor-ci-manager
@@ -34,7 +34,7 @@ docker:
 
         agent:
             container_name: go_cd_agent
-            data_dir: /var/www/private/go_cd
+            data_dir: /docker_data/go_cd
 
     db:
         container_name: db-server
@@ -44,7 +44,7 @@ docker:
         port: 3306
         password: 1234
 #        data_dir: /var/www/private/db
-        data_dir: /data/db
+        data_dir: /docker_data/db
         image: "docktor-ci-manager:5000/percona"
         fs_user: mysql
         fs_user_id: 999

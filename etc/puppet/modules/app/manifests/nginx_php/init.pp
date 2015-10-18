@@ -14,12 +14,6 @@ class app::nginx_php::init (
     # TODO: fix permissions problems with mounting volumes
     docker::run { $config['container_name']:
         image           => $config['image'],
-#        env             => [
-#            "MYSQL_ROOT_PASSWORD=${config[root_password]}",
-#            "MYSQL_DATABASE=${config[dbname]}",
-#            "MYSQL_USER=${config[user]}",
-#            "MYSQL_PASSWORD=${config[password]}",
-#        ],
         links => [
             "${db[container_name]}:percona"
         ],
